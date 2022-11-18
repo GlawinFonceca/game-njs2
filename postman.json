@@ -7,6 +7,63 @@
   },
   "item": [
     {
+      "name": "game",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "enc_state",
+            "value": "1",
+            "disabled": true,
+            "description": "Encryption status: 1- Enable, 2- Disable",
+            "type": "text"
+          },
+          {
+            "key": "lng_key",
+            "value": "en",
+            "disabled": true,
+            "description": "Langauage key",
+            "type": "text"
+          },
+          {
+            "key": "access_token",
+            "value": "",
+            "description": "JWT access token",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/game",
+          "host": [
+            "http://localhost:3000"
+          ],
+          "path": [
+            "game"
+          ]
+        },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "matrix",
+              "value": "",
+              "disabled": true,
+              "description": "matrix",
+              "type": "text"
+            },
+            {
+              "key": "data",
+              "value": "",
+              "disabled": true,
+              "description": "Encrypted data and url encode(URLSearchParams) the encrypted data to handle special characters",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "userEditProfile",
       "request": {
         "method": "POST",

@@ -17,6 +17,10 @@ class UserLoginAction extends baseAction {
         this.setResponse("INVALID_USER_CREDENTIALS", { message: "password" });
       }
       let accessToken = await jwtHelperLib.jwtEncryption(user.user_id);
+      await userSqlLib.updateUsers(
+        { user_id: user.user_id },
+        { access_token: accessToken }
+      );
       this.setResponse("SUCCESS");
       return { access_token: accessToken };
     } catch (e) {

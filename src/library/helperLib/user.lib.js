@@ -31,7 +31,7 @@ class user {
       ) {
         return { status: true };
       } else if (!isValidUserName) {
-        return { status: false, message: "name Please enter alphabets" };
+        return { status: false, message: "name Please enter alphabets only" };
       } else if (!isValidUserEmail) {
         return { status: false, message: "emisl Please enter valid email" };
       } else if (!isValidUserPassword) {
@@ -51,7 +51,10 @@ class user {
   async userUpdate(userId, name, phone) {
     try {
       if (!name && !phone) {
-        return { status: false, message: "Please enter name or phone number" };
+        return {
+          status: false,
+          message: "name and number Please enter name or phone number",
+        };
       } else if (!phone) {
         name = name.toLowerCase();
         const isValiduserName = this.lettersAndSpaceCheck(name);
@@ -59,7 +62,7 @@ class user {
           await SQLManager.update("user", { user_id: userId }, { name: name });
           return { status: true, message: "Successfully updated" };
         } else {
-          return { status: false, message: "Please enter alphabets only" };
+          return { status: false, message: "name Please enter alphabets only" };
         }
       } else if (!name) {
         const isValidPhoneNumber =
@@ -71,7 +74,7 @@ class user {
             { user_id: userId },
             { phone: phone }
           );
-          return { status: true, message: "Successfully updated" };
+          return { status: true };
         } else {
           return {
             status: false,
@@ -90,7 +93,7 @@ class user {
             phone,
           };
           await SQLManager.update("user", { user_id: userId }, userObj);
-          return { status: true, message: "Successfully updated" };
+          return { status: true };
         } else if (!isValiduserName) {
           return { status: false, message: "name Please enter alphabets only" };
         } else if (!isValidPhoneNumber) {

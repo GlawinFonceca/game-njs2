@@ -1,9 +1,12 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
 
 class UserSignupAction extends baseAction {
   async executeMethod() {
     try {
-      let [userHelperLib,jwtHelperLib] = AutoLoad.loadLibray("helperLib", ["user","jwtEncode"]);
+      let [userHelperLib, jwtHelperLib] = AutoLoad.loadLibray("helperLib", [
+        "user",
+        "jwtEncode",
+      ]);
       let [userSqlLib] = AutoLoad.loadLibray("sqlLib", ["user"]);
       let { name, email, password, phone } = this;
 
@@ -21,10 +24,12 @@ class UserSignupAction extends baseAction {
       }
       let user = await userSqlLib.getUser(email);
       if (user) {
-        this.setResponse("INVALID_USER", { message: "User already exists" });
+        this.setResponse("INVALID_USER", {
+          message: "Email already saved. Please login",
+        });
         return {};
       }
-      password = await bcrypt.hash(password,GLB.SALTROUNDS);
+      password = await bcrypt.hash(password, GLB.SALTROUNDS);
       let userObj = {
         name,
         email,
@@ -33,6 +38,10 @@ class UserSignupAction extends baseAction {
       };
       let userId = await userSqlLib.create(userObj);
       let accessToken = await jwtHelperLib.jwtEncryption(userId);
+      await userSqlLib.updateUsers(
+        { user_id: userId },
+        { access_token: accessToken }
+      );
       this.setResponse("SUCCESS");
       return { access_token: accessToken };
     } catch (e) {
