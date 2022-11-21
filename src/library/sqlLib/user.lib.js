@@ -37,7 +37,26 @@ class user {
       return await SQLManager.update(
         "user",
         { user_id: userId },
-        { points: { $inc: point }, win_games: { $inc: 1 } }
+        {
+          points: { $inc: point },
+          win_games: { $inc: 1 },
+          total_played_games: { $inc: 1 },
+        }
+      );
+    } catch (e) {
+      console.log("Error update =>", e);
+    }
+  }
+
+  async updates(point, userId) {
+    try {
+      return await SQLManager.update(
+        "user",
+        { user_id: userId },
+        {
+          points: { $inc: point },
+          total_played_games: { $inc: 1 },
+        }
       );
     } catch (e) {
       console.log("Error update =>", e);

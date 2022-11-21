@@ -23,8 +23,9 @@ constant.DISCONNECTION_HANDLER_METHOD = null;
 
 constant.SALTROUNDS=8;
 constant.JWT_EXPIRE_TIME=3600000;
-constant.WINNING_POINTS=100;
-constant.DRAW_POINTS=25;
-constant.ENTRY_POINTS=50;
+constant.WINNING_POINTS=50;
+constant.DRAW_POINTS=-25;
+constant.LOST_POINTS=-50;
+constant.ENTRY_POINTS=500;
 
 module.exports = constant;
