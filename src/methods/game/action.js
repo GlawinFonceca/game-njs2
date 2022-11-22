@@ -1,13 +1,7 @@
+const SQLManager = require("@njs2/sql");
+
 let userCount = 0;
 let botCount = 0;
-let constant1,
-  constant2,
-  constant3,
-  constant4,
-  constant5,
-  constant6,
-  constant7,
-  constant8 = 0;
 
 class GameAction extends baseAction {
   generateRandomIndex(num) {
@@ -34,95 +28,91 @@ class GameAction extends baseAction {
     console.log({ botCount });
   }
 
-  winnerSelection(matrix, userTurn) {
-    if (constant1 !== 1) {
-      if (matrix[0] === "x" && matrix[1] === "o" && matrix[2] === "x") {
-        if (userTurn % 2 == 0) {
-          this.userStrike();
-          constant1 = 1;
-        } else {
-          this.botStrike();
-          constant1 = 1;
-        }
-      }
-    }
-    if (constant2 !== 2) {
-      if (matrix[3] === "x" && matrix[4] === "o" && matrix[5] === "x") {
-        if (userTurn % 2 == 0) {
-          this.userStrike();
-          constant2 = 2;
-        } else {
-          this.botStrike();
-          constant2 = 2;
-        }
-      }
-    }
-    if (constant3 !== 3) {
-      if (matrix[6] === "x" && matrix[7] === "o" && matrix[8] === "x") {
-        if (userTurn % 2 == 0) {
-          this.userStrike();
-          constant3 = 3;
-        } else {
-          this.botStrike();
-          constant3 = 3;
-        }
-      }
-    }
-    if (constant4 !== 4) {
-      if (matrix[0] === "x" && matrix[3] === "o" && matrix[6] === "x") {
-        if (userTurn % 2 == 0) {
-          this.userStrike();
-          constant4 = 4;
-        } else {
-          this.botStrike();
-          constant4 = 4;
-        }
-      }
-    }
-    if (constant5 !== 5) {
-      if (matrix[1] === "x" && matrix[4] === "o" && matrix[7] === "x") {
-        if (userTurn % 2 == 0) {
-          this.userStrike();
-          constant5 = 5;
-        } else {
-          this.botStrike();
-          constant5 = 5;
-        }
-      }
-    }
-    if (constant6 !== 6) {
-      if (matrix[2] === "x" && matrix[5] === "o" && matrix[8] === "x") {
-        if (userTurn % 2 == 0) {
-          this.userStrike();
-          constant6 = 6;
-        } else {
-          this.botStrike();
-          constant6 = 6;
-        }
-      }
-    }
-    if (constant7 !== 7) {
-      if (matrix[0] === "x" && matrix[4] === "o" && matrix[8] === "x") {
-        if (userTurn % 2 == 0) {
-          this.userStrike();
-          constant7 = 7;
-        } else {
-          this.botStrike();
-          constant7 = 7;
-        }
-      }
-    }
-    if (constant8 !== 8) {
-      if (matrix[2] === "x" && matrix[4] === "o" && matrix[6] === "x") {
-        if (userTurn % 2 == 0) {
-          this.userStrike();
-          constant8 = 8;
-        } else {
-          this.botStrike();
-          constant8 = 8;
-        }
-      }
-    }
+  async winnerSelection(matrix, turn, userId) {
+    let strike = await SQLManager.findOne("room", { user_id: userId });
+    let strikes = strike.strikes;
+    console.log(strikes.strike1);
+
+    // if (strikes.strike1 !==1) {
+    //   if (matrix[0] === "x" && matrix[1] === "o" && matrix[2] === "x") {
+    //     await SQLManager.update("room",{user_id : userId},strikes.strike1 = 1)
+    //     if (turn % 2 == 0) {
+    //       this.userStrike();
+    //     } else {
+    //       this.botStrike();
+    //     }
+    //   }
+    // }
+    // if (constant2 !== 2) {
+    //   if (matrix[3] === "x" && matrix[4] === "o" && matrix[5] === "x") {
+    //     constant2 = 2;
+    //     if (turn % 2 == 0) {
+    //       this.userStrike();
+    //     } else {
+    //       this.botStrike();
+    //     }
+    //   }
+    // }
+    // if (constant3 !== 3) {
+    //   if (matrix[6] === "x" && matrix[7] === "o" && matrix[8] === "x") {
+    //     constant3 = 3;
+    //     if (turn % 2 == 0) {
+    //       this.userStrike();
+    //     } else {
+    //       this.botStrike();
+    //     }
+    //   }
+    // }
+    // if (constant4 !== 4) {
+    //   if (matrix[0] === "x" && matrix[3] === "o" && matrix[6] === "x") {
+    //     constant4 = 4;
+    //     if (turn % 2 == 0) {
+    //       this.userStrike();
+    //     } else {
+    //       this.botStrike();
+    //     }
+    //   }
+    // }
+    // if (constant5 !== 5) {
+    //   if (matrix[1] === "x" && matrix[4] === "o" && matrix[7] === "x") {
+    //     constant5 = 5;
+    //     if (turn % 2 == 0) {
+    //       this.userStrike();
+    //     } else {
+    //       this.botStrike();
+    //     }
+    //   }
+    // }
+    // if (constant6 !== 6) {
+    //   if (matrix[2] === "x" && matrix[5] === "o" && matrix[8] === "x") {
+    //     constant6 = 6;
+    //     if (turn % 2 == 0) {
+    //       this.userStrike();
+    //     } else {
+    //       this.botStrike();
+    //     }
+    //   }
+    // }
+    // if (constant7 !== 7) {
+    //   if (matrix[0] === "x" && matrix[4] === "o" && matrix[8] === "x") {
+    //     constant7 = 7;
+    //     if (turn % 2 == 0) {
+    //       this.userStrike();
+    //     } else {
+    //       this.botStrike();
+    //     }
+    //   }
+    // }
+    // if (constant8 !== 8) {
+    //   if (matrix[2] === "x" && matrix[4] === "o" && matrix[6] === "x") {
+    //     constant8 = 8;
+    //     if (turn % 2 == 0) {
+    //       this.userStrike();
+    //     } else {
+    //       this.botStrike();
+    //     }
+    //   }
+    // }
   }
 
   chooseUserTurn(matrix) {
@@ -135,78 +125,57 @@ class GameAction extends baseAction {
   async executeMethod() {
     try {
       let [userSqlLib] = AutoLoad.loadLibray("sqlLib", ["user"]);
+      let [userHelperLib] = AutoLoad.loadLibray("helperLib", ["room"]);
+
       let { userObj } = this;
 
-      let { matrix } = this;
-      if (typeof matrix === "string") {
-        matrix = JSON.parse(matrix);
+      let { index, value } = this;
 
-        const userTurnn = this.chooseUserTurn(matrix);
-        let result = this.winnerSelection(matrix, userTurnn);
-
-        // if (result) {
-        //   await userSqlLib.update(GLB.WINNING_POINTS, userObj.user_id);
-        //   return "win";
-        // } else {
-
-        let userTurn = this.chooseUserTurn(matrix);
-        if (userTurn % 2 == 0) {
-          //bot's turn
-          //taking index of empty elements in matrix array
-          const indexOfMatrixElements = matrix
-            .map((item, i) => (item == "" ? i : 9))
-            .filter((x) => x != 9);
-          //return index indexOf Matrix's EmptyElements
-          const indexForBotSelection = this.generateRandomIndex(
-            indexOfMatrixElements.length
-          );
-          const botSelectedData = this.getRandomBotDecision();
-
-          const botSelectedIndex = indexOfMatrixElements[indexForBotSelection];
-
-          matrix.splice(botSelectedIndex, 1, botSelectedData);
-          userTurn = this.chooseUserTurn(matrix);
-          let result = this.winnerSelection(matrix, userTurn);
-
-          //   if (result) {
-          //     await userSqlLib.updates(GLB.LOST_POINTS, userObj.user_id);
-          //     return { message: "you are lost" };
-          //   }
-        } else {
-          return { matrix, message: "user" };
-        }
-        let draw = matrix.every((e) => e !== "");
-        if (draw) {
-          if (userCount > botCount) {
-            await userSqlLib.update(GLB.WINNING_POINTS, userObj.user_id);
-            botCount = 0;
-            userCount = 0;
-            constant1 = constant2 = constant3 = constant4 = constant5 = constant6 = constant7 = constant8 = 0;
-            return "win";
-          } else if (botCount > userCount) {
-            await userSqlLib.updates(GLB.LOST_POINTS, userObj.user_id);
-            botCount = 0;
-            userCount = 0;
-            constant1 = constant2 = constant3 = constant4 = constant5 = constant6 = constant7 = constant8 = 0;
-            return { message: "you are lost" };
-          } else if (userCount >= 0 === botCount >= 0) {
-            await userSqlLib.updates(GLB.DRAW_POINTS, userObj.user_id);
-            botCount = 0;
-            userCount = 0;
-            constant1 = constant2 = constant3 = constant4 = constant5 = constant6 = constant7 = constant8 = 0;
-            return { message: "match draw" };
+        if (typeof matrix === "string") {
+          matrix = JSON.parse(matrix);
+          const userTurns = this.chooseUserTurn(matrix);
+          this.winnerSelection(matrix, userTurns,userObj.user_id);
+          let botTurn = this.chooseUserTurn(matrix);
+          if (botTurn % 2 == 0) {
+            //taking index of empty elements in matrix array
+            const indexOfMatrixElements = matrix
+              .map((item, i) => (item == "" ? i : 9))
+              .filter((x) => x != 9);
+            //return index indexOf Matrix's EmptyElements
+            const indexForBotSelection = this.generateRandomIndex(
+              indexOfMatrixElements.length
+            );
+            const botSelectedData = this.getRandomBotDecision();
+            const botSelectedIndex = indexOfMatrixElements[indexForBotSelection];
+            matrix.splice(botSelectedIndex, 1, botSelectedData);
+            botTurn = this.chooseUserTurn(matrix);
+            this.winnerSelection(matrix, botTurn);
+          } else {
+            return { matrix, message: "user's Turn" };
           }
+          let draw = matrix.every((e) => e !== "");
+          if (draw) {
+            if (userCount > botCount) {
+              await userSqlLib.update(GLB.WINNING_POINTS, userObj.user_id);
+              botCount = userCount = 0;
+              return { message: "win" };
+            } else if (botCount > userCount) {
+              await userSqlLib.updates(GLB.LOST_POINTS, userObj.user_id);
+              botCount = userCount = 0;
+              return { message: "you are lost" };
+            } else {
+              await userSqlLib.updates(GLB.DRAW_POINTS, userObj.user_id);
+              botCount = userCount = 0;
+              return { message: "match draw" };
+            }
+          }
+          return matrix;
         }
-        return matrix;
+     
 
-        // let draw = matrix.every((e) => e !== "");
-        // if (draw) {
-        //   await userSqlLib.updates(GLB.DRAW_POINTS, userObj.user_id);
-        //   return { message: "match draw" };
-        // } else {
       }
-      //}
-    } catch (e) {
+    
+     catch (e) {
       console.log("Error game =>", e);
     }
   }

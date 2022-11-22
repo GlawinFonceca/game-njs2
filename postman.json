@@ -45,10 +45,24 @@
           "mode": "urlencoded",
           "urlencoded": [
             {
-              "key": "matrix",
+              "key": "game_mode",
+              "value": 0,
+              "disabled": false,
+              "description": "game modes are 0 for start game, 1 for resume game,2 for restart game",
+              "type": "text"
+            },
+            {
+              "key": "index",
               "value": "",
               "disabled": true,
-              "description": "matrix",
+              "description": "Enter a index between 1 to 9",
+              "type": "text"
+            },
+            {
+              "key": "value",
+              "value": "",
+              "disabled": true,
+              "description": "Enter 'x' or 'o'",
               "type": "text"
             },
             {

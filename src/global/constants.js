@@ -27,5 +27,9 @@ constant.WINNING_POINTS=50;
 constant.DRAW_POINTS=-25;
 constant.LOST_POINTS=-50;
 constant.ENTRY_POINTS=500;
+constant.ENTRY_DEDUCT_POINTS=50;
+constant.POINTS =50;
+constant.STATUS=1;
+
 
 module.exports = constant;

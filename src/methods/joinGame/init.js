@@ -1,4 +1,4 @@
-class GameInitalize extends baseInitialize {
+class JoinGameInitalize extends baseInitialize {
   constructor() {
     super();
     this.initializer = {};
@@ -8,17 +8,17 @@ class GameInitalize extends baseInitialize {
 
   getParameter() {
     const param = {
-      index: {
-        name: "index",
+      game_mode: {
+        name: "game_mode",
         type: "number",
-        description: "Enter a index between 1 to 9",
-        required: false,
-        default: "",
+        description: "game mode",
+        required: true,
+        default: 0,
       },
-      value: {
-        name: "value",
+      room_id: {
+        name: "room_id",
         type: "string",
-        description: "Enter 'x' or 'o'",
+        description: "room id",
         required: false,
         default: "",
       },
@@ -28,4 +28,4 @@ class GameInitalize extends baseInitialize {
   }
 }
 
-module.exports = GameInitalize;
+module.exports = JoinGameInitalize;
