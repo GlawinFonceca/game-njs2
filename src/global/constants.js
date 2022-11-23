@@ -26,10 +26,14 @@ constant.JWT_EXPIRE_TIME=3600000;
 constant.WINNING_POINTS=50;
 constant.DRAW_POINTS=-25;
 constant.LOST_POINTS=-50;
+
 constant.ENTRY_POINTS=500;
-constant.ENTRY_DEDUCT_POINTS=50;
 constant.POINTS =50;
-constant.STATUS=1;
+constant.STATUS=0;
+constant.ACTIVE_STATUS=1;
+constant.NORMAL_CHECK=0;
+constant.RESUME_GAME=1;
+constant.NEW_GAME=2;
 
 
 module.exports = constant;

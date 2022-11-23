@@ -15,8 +15,8 @@ class JoinGameInitalize extends baseInitialize {
         required: true,
         default: 0,
       },
-      room_id: {
-        name: "room_id",
+      roomId: {
+        name: "roomId",
         type: "string",
         description: "room id",
         required: false,

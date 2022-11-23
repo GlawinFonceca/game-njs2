@@ -11,15 +11,22 @@ class GameInitalize extends baseInitialize {
       index: {
         name: "index",
         type: "number",
-        description: "Enter a index between 1 to 9",
-        required: false,
+        description: "Enter a index between 0 to 8",
+        required: true,
         default: "",
       },
       value: {
         name: "value",
         type: "string",
         description: "Enter 'x' or 'o'",
-        required: false,
+        required: true,
+        default: "",
+      },
+      roomId: {
+        name: "roomId",
+        type: "string",
+        description: "user's room_id",
+        required: true,
         default: "",
       },
     };

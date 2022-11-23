@@ -63,7 +63,7 @@ class user {
     }
   }
 
-  async userEntry(point, userId) {
+  async userUpdate(point, userId) {
     try {
       return await SQLManager.update(
         "user",
@@ -78,8 +78,6 @@ class user {
     }
   }
 
-
-  
   // await SQLManager.update("user",{user_id:1},{points:{ $dec:100},total_played_ames:{$inc:1}})//$gt: 23872, $lt: 198, $in: [4,4,4]
 }
 

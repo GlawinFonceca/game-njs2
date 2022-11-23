@@ -1,9 +1,7 @@
-const SQLManager = require("@njs2/sql");
-
 class room {
   async joinRoom(user) {
     try {
-      let [userSqlLib] = AutoLoad.loadLibray("sqlLib", ["user"]);
+      let [userSqlLib,roomSqlLib] = AutoLoad.loadLibray("sqlLib", ["user","room"]);
       const strike = {
         strike1: 0,
         strike2: 0,
@@ -15,8 +13,8 @@ class room {
         strike8: 0,
       };
       if (user.points >= GLB.POINTS) {
-        const result = await userSqlLib.userEntry(
-          GLB.ENTRY_DEDUCT_POINTS,
+        const updated = await userSqlLib.userUpdate(
+          GLB.POINTS,
           user.user_id
         );
         let userData = {
@@ -24,11 +22,10 @@ class room {
           status: GLB.STATUS,
           strikes: strike,
         };
-        if (result) {
-          return await SQLManager.insert("room",userData); 
+        if (updated) {
+          return await roomSqlLib.create(userData);
         }
       } else {
-        console.log("insufficient balance");
         return false;
       }
     } catch (e) {
