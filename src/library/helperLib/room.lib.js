@@ -1,29 +1,19 @@
 class room {
-  async joinRoom(user) {
+  async joinRoom(userId,userPoints) {
     try {
       let [userSqlLib,roomSqlLib] = AutoLoad.loadLibray("sqlLib", ["user","room"]);
-      const strike = {
-        strike1: 0,
-        strike2: 0,
-        strike3: 0,
-        strike4: 0,
-        strike5: 0,
-        strike6: 0,
-        strike7: 0,
-        strike8: 0,
-      };
-      if (user.points >= GLB.POINTS) {
-        const updated = await userSqlLib.userUpdate(
-          GLB.POINTS,
-          user.user_id
+      if (userPoints >= GLB.USER_GAME.MINIMUM_POINTS) {
+        const updated = await userSqlLib.updateUsers({user_id: userId},
+          {points :{$dec :GLB.USER_GAME.MINIMUM_POINTS}}
         );
-        let userData = {
-          user_id: user.user_id,
-          status: GLB.STATUS,
-          strikes: strike,
+        let roomData = {
+          user_id: userId,
+          status: GLB.ROOM_STATUS.ACTIVE_STATUS,
+          strikes: GLB.DEFAULT_STRIKE,
+          matrix: GLB.DEFAULT_MATRIX
         };
         if (updated) {
-          return await roomSqlLib.create(userData);
+          return await roomSqlLib.createRoom(roomData);
         }
       } else {
         return false;

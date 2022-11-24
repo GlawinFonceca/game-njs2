@@ -1,52 +1,45 @@
-const SQLManager = require("@njs2/sql");
-
 class JoinGameAction extends baseAction {
   async executeMethod() {
     try {
       let [roomHelperLib] = AutoLoad.loadLibray("helperLib", ["room"]);
       let [roomSqlLib] = AutoLoad.loadLibray("sqlLib", ["room"]);
-      let { userObj } = this;
-      let { game_mode } = this;
+      let { userObj, game_mode,roomId  } = this;
 
-      if (game_mode == GLB.NORMAL_CHECK) {
-        let room = await roomSqlLib.findRoom(userObj.user_id);
+      if (game_mode === GLB.GAME_MODE.NORMAL_CHECK) {
+        let room = await roomSqlLib.findRoom({
+          user_id: userObj.user_id,
+          status: GLB.ROOM_STATUS.ACTIVE_STATUS,
+        });
         if (!room) {
           this.setResponse("ROOM_NOT_FOUND");
           return {};
         }
-        this.setResponse("ROOM_FOUND");
-        return {
-          room_id: room.room_id,
-        };
-      } else if (game_mode == GLB.RESUME_GAME) {
-        let { roomId } = this;
-        const validRoomId = await roomSqlLib.findRoomId(
-          roomId,
-          userObj.user_id
-        );
-        if (!validRoomId) {
-          this.setResponse("INVALID_ROOMID");
+        this.setResponse("SUCCESS");
+        return {room_id:room.room_id};
+      } else if (game_mode === GLB.GAME_MODE.RESUME_GAME) {
+        if(!roomId){
+          this.setResponse("INVALID_ROOM_ID");
           return {};
         }
-        const room = await roomSqlLib.findActiveUser(
-          roomId,
-          userObj.user_id
-        );
+        const room= await roomSqlLib.findRoom({
+          room_id: roomId,
+          user_id: userObj.user_id,
+        });
         if (!room) {
-          this.setResponse("NO_PENDING_GAME", { id: roomId });
+          this.setResponse("INVALID_ROOM_ID");
           return {};
         }
         const matrix = JSON.parse(room.matrix);
         this.setResponse("SUCCESS");
         return { matrix: matrix };
-      } else if (game_mode === GLB.NEW_GAME) {
-        await roomSqlLib.roomUpdate(userObj.user_id);
-        const roomId = await roomHelperLib.joinRoom(userObj);
+      } else if (game_mode === GLB.GAME_MODE.NEW_GAME) {
+        await roomSqlLib.updateActiveRoomStatus(userObj.user_id);
+        const roomId = await roomHelperLib.joinRoom(userObj.user_id,userObj.points);
         if (!roomId) {
-          this.setResponse("INSUFFICIENT_POPINTS");
+          this.setResponse("INSUFFICIENT_POINTS");
           return {};
         }
-        this.setResponse("JOINED_ROOM");
+        this.setResponse("SUCCESS");
         return { room_id: roomId };
       }
     } catch (e) {

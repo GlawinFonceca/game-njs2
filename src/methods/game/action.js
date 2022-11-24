@@ -1,210 +1,131 @@
-const { AutoLoad } = require("@njs2/base");
-const SQLManager = require("@njs2/sql");
-
-let userCount = 0;
-let botCount = 0;
-
 class GameAction extends baseAction {
-  generateRandomIndex(num) {
-    let item = Math.floor(Math.random() * (num - 1));
-    return item;
-  }
-
-  getRandomBotDecision() {
-    let item = Math.floor(Math.random() * 2);
-    if (item === 0) {
-      return "x";
-    } else {
-      return "o";
-    }
-  }
-
-  userStrike() {
-    userCount = userCount + 1;
-    console.log({ userCount });
-  }
-
-  botStrike() {
-    botCount = botCount + 1;
-    console.log({ botCount });
-  }
-
-  async winnerSelection(matrix, turn, userId, roomId) {
-    let [roomSqlLib] = AutoLoad.loadLibray("sqlLib", ["room"]);
-    let strike = await SQLManager.findOne("room", {
-      user_id: userId,
-      room_id: roomId,
-    });
-    let strikes = strike.strikes;
-
-    if (strikes.strike1 !== 1) {
-      if (matrix[0] === "x" && matrix[1] === "o" && matrix[2] === "x") {
-        await roomSqlLib.updateStrike(
-          { user_id: userId, room_id: roomId },
-          { strikes: { strike1: { $inc: 1 } } }
-        );
-        if (turn % 2 == 0) {
-          this.userStrike();
-        } else {
-          this.botStrike();
-        }
-      }
-    }
-    if (strikes.strike2 !== 1) {
-      if (matrix[3] === "x" && matrix[4] === "o" && matrix[5] === "x") {
-        await roomSqlLib.updateStrike(
-          { user_id: userId, room_id: roomId },
-          { strikes: { strike2: { $inc: 1 } } }
-        );
-        if (turn % 2 == 0) {
-          this.userStrike();
-        } else {
-          this.botStrike();
-        }
-      }
-    }
-    if (strikes.strike3 !== 1) {
-      if (matrix[6] === "x" && matrix[7] === "o" && matrix[8] === "x") {
-        await roomSqlLib.updateStrike(
-          { user_id: userId, room_id: roomId },
-          { strikes: { strike3: { $inc: 1 } } }
-        );
-        if (turn % 2 == 0) {
-          this.userStrike();
-        } else {
-          this.botStrike();
-        }
-      }
-    }
-    if (strikes.strike4 !== 1) {
-      if (matrix[0] === "x" && matrix[3] === "o" && matrix[6] === "x") {
-        await roomSqlLib.updateStrike(
-          { user_id: userId, room_id: roomId },
-          { strikes: { strike4: { $inc: 1 } } }
-        );
-        if (turn % 2 == 0) {
-          this.userStrike();
-        } else {
-          this.botStrike();
-        }
-      }
-    }
-    if (strikes.strike5 !== 1) {
-      if (matrix[1] === "x" && matrix[4] === "o" && matrix[7] === "x") {
-        await roomSqlLib.updateStrike(
-          { user_id: userId, room_id: roomId },
-          { strikes: { strike5: { $inc: 1 } } }
-        );
-        if (turn % 2 == 0) {
-          this.userStrike();
-        } else {
-          this.botStrike();
-        }
-      }
-    }
-    if (strikes.strike6 !== 1) {
-      if (matrix[2] === "x" && matrix[5] === "o" && matrix[8] === "x") {
-        await roomSqlLib.updateStrike(
-          { user_id: userId, room_id: roomId },
-          { strikes: { strike6: { $inc: 1 } } }
-        );
-        if (turn % 2 == 0) {
-          this.userStrike();
-        } else {
-          this.botStrike();
-        }
-      }
-    }
-    if (strikes.strike7 !== 1) {
-      if (matrix[0] === "x" && matrix[4] === "o" && matrix[8] === "x") {
-        await roomSqlLib.updateStrike(
-          { user_id: userId, room_id: roomId },
-          { strikes: { strike7: { $inc: 1 } } }
-        );
-        if (turn % 2 == 0) {
-          this.userStrike();
-        } else {
-          this.botStrike();
-        }
-      }
-    }
-    if (strikes.strike8 !== 1) {
-      if (matrix[2] === "x" && matrix[4] === "o" && matrix[6] === "x") {
-        await roomSqlLib.updateStrike(
-          { user_id: userId, room_id: roomId },
-          { strikes: { strike8: { $inc: 1 } } }
-        );
-        if (turn % 2 == 0) {
-          this.userStrike();
-        } else {
-          this.botStrike();
-        }
-      }
-    }
-  }
-
-  chooseTurn(matrix) {
-    const turn = matrix
-      .map((item, i) => (item == "" ? i : 9))
-      .filter((x) => x != 9);
-    return turn.length;
-  }
-
   async executeMethod() {
     try {
-      let [roomSqlLib] = AutoLoad.loadLibray("sqlLib", ["room"]);
-      let [roomHelperLib] = AutoLoad.loadLibray("helperLib", ["room"]);
+      let [roomSqlLib, userSqlLib] = AutoLoad.loadLibray("sqlLib", [
+        "room",
+        "user",
+      ]);
+      let [gameHelperLib] = AutoLoad.loadLibray("helperLib", ["game"]);
 
-      let { userObj } = this;
-
-      let { index, value, roomId } = this;
-
-      let room = await roomSqlLib.findRooms(userObj.user_id, roomId);
-      let matrix = room.matrix;
-      if (typeof matrix === "string") {
-        matrix = JSON.parse(matrix);
-        if (matrix[index] == "") {
-          matrix.splice(index, 1, value);
-          await roomSqlLib.updateMatrix(userObj.user_id, roomId, matrix);
-          const userTurns = this.chooseTurn(matrix);
-          this.winnerSelection(matrix, userTurns, userObj.user_id, roomId);
-            // let botTurn = this.chooseTurn(matrix);
-            // if (botTurn % 2 == 0) {
-            //   //taking index of empty elements in matrix array
-            //   const indexOfMatrixElements = matrix
-            //     .map((item, i) => (item == "" ? i : 9))
-            //     .filter((x) => x != 9);
-            //   //return index indexOf Matrix's EmptyElements
-            //   const indexForBotSelection = this.generateRandomIndex(
-            //     indexOfMatrixElements.length
-            //   );
-            //   const botSelectedData = this.getRandomBotDecision();
-            //   const botSelectedIndex = indexOfMatrixElements[indexForBotSelection];
-            //   matrix.splice(botSelectedIndex, 1, botSelectedData);
-            //   botTurn = this.chooseTurn(matrix);
-            //   this.winnerSelection(matrix, botTurn);
-            // } else {
-            //   return { matrix, message: "user's Turn" };
-            // }
-            // let draw = matrix.every((e) => e !== "");
-            // if (draw) {
-            //   if (userCount > botCount) {
-            //     await userSqlLib.update(GLB.WINNING_POINTS, userObj.user_id);
-            //     botCount = userCount = 0;
-            //     return { message: "win" };
-            //   } else if (botCount > userCount) {
-            //     await userSqlLib.updates(GLB.LOST_POINTS, userObj.user_id);
-            //     botCount = userCount = 0;
-            //     return { message: "you are lost" };
-            //   } else {
-            //     await userSqlLib.updates(GLB.DRAW_POINTS, userObj.user_id);
-            //     botCount = userCount = 0;
-            //     return { message: "match draw" };
-            //   }
-            // }
-            // return matrix;
-        } else console.log("invalid");
+      let { userObj, index, value, roomId } = this;
+      value = value.toLowerCase();
+      if (!roomId) {
+        this.setResponse("INVALID_ROOM_ID");
+        return {};
       }
+      const validIndex = await gameHelperLib.indexValidation(index);
+      if (!validIndex) {
+        this.setResponse("INVALID_INDEX");
+        return {};
+      }
+      const validValue = await gameHelperLib.valueValidation(value);
+      if (!validValue) {
+        this.setResponse("INVALID_VALUE");
+        return {};
+      }
+      let room = await roomSqlLib.findRoom({
+        user_id: userObj.user_id,
+        room_id: roomId,
+      });
+      let matrix = room.matrix;
+      if (typeof matrix == "string") {
+        matrix = JSON.parse(matrix);
+      }
+
+      if (matrix[index] !== "") {
+        this.setResponse("INVALID_INDEX");
+        return {};
+      }
+      matrix.splice(index, 1, value);
+      await roomSqlLib.updateMatrix(userObj.user_id, roomId, matrix);
+      const userTurn = await gameHelperLib.chooseTurn(matrix);
+      await gameHelperLib.winnerSelection(
+        matrix,
+        room.strikes,
+        userTurn,
+        userObj.user_id,
+        roomId
+      );
+      let botTurn = await gameHelperLib.chooseTurn(matrix);
+      if (botTurn % 2 == 0) {
+        //taking index of empty elements in matrix array
+        const indexOfMatrixElements = matrix
+          .map((item, i) => (item == "" ? i : 9))
+          .filter((x) => x != 9);
+        //return index indexOf Matrix's EmptyElements
+        const indexForBotSelection = await gameHelperLib.generateRandomIndex(
+          indexOfMatrixElements.length
+        );
+        const botSelectedData = await gameHelperLib.getRandomBotDecision();
+        const botSelectedIndex = indexOfMatrixElements[indexForBotSelection];
+        matrix.splice(botSelectedIndex, 1, botSelectedData);
+        await roomSqlLib.updateMatrix(userObj.user_id, roomId, matrix);
+        room = await roomSqlLib.findRoom({
+          user_id: userObj.user_id,
+          room_id: roomId,
+        });
+        botTurn = await gameHelperLib.chooseTurn(matrix);
+        await gameHelperLib.winnerSelection(
+          matrix,
+          room.strikes,
+          botTurn,
+          userObj.user_id,
+          roomId
+        );
+      } else {
+        return { matrix, message: "user's Turn" };
+      }
+      let draw = matrix.every((e) => e !== "");
+      if (draw) {
+        room = await roomSqlLib.findRoom({
+          user_id: userObj.user_id,
+          room_id: roomId,
+        });
+        if (room.user_strike > room.bot_strike) {
+          await userSqlLib.updateUsers(
+            { user_id: userObj.user_id },
+            {
+              points: { $inc: GLB.USER_GAME.WINNING_POINTS },
+              win_games: { $inc: 1 },
+              total_played_games: { $inc: 1 },
+            }
+          );
+          await roomSqlLib.updateRoom(
+            { user_id: userObj.user_id, room_id: roomId },
+            { status: GLB.ROOM_STATUS.COMPLETED_STATUS }
+          );
+          this.setResponse("SUCCESS");
+          return { message: "win" };
+        } else if (room.bot_strike > room.user_strike) {
+          await userSqlLib.updateUsers(
+            { user_id: userObj.user_id },
+            {
+              total_played_games: { $inc: 1 },
+            }
+          );
+          await roomSqlLib.updateRoom(
+            { user_id: userObj.user_id, room_id: roomId },
+            { status: GLB.ROOM_STATUS.COMPLETED_STATUS }
+          );
+          this.setResponse("SUCCESS");
+          return { message: "you lost" };
+        } else {
+          await userSqlLib.updateUsers(
+            { user_id: userObj.user_id },
+            {
+              points: { $inc: GLB.USER_GAME.DRAW_POINTS },
+              total_played_games: { $inc: 1 },
+            }
+          );
+          await roomSqlLib.updateRoom(
+            { user_id: userObj.user_id, room_id: roomId },
+            { status: GLB.ROOM_STATUS.COMPLETED_STATUS }
+          );
+          this.setResponse("SUCCESS");
+          return { message: "match draw" };
+        }
+      }
+      return matrix;
     } catch (e) {
       console.log("Error game =>", e);
     }
