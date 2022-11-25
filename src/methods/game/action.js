@@ -35,7 +35,7 @@ class GameAction extends baseAction {
 
       if (matrix[index] !== "") {
         this.setResponse("INVALID_INDEX");
-        return { matrix };
+        return { };
       }
       matrix.splice(index, 1, value);
       await roomSqlLib.updateMatrix(userObj.user_id, roomId, matrix);

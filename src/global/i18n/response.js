@@ -46,7 +46,12 @@ const RESPONSE = {
     responseMessage: {
       en: "inavalid value.Please enter 'x' or 'o' ",
     },
-
+  },
+  SOCKETID_NOT_FOUND: {
+    responseCode: 1008,
+    responseMessage: {
+      en: "Socket_id not found",
+    },
   }
   
 };

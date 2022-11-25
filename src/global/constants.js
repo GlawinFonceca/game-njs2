@@ -55,5 +55,7 @@ constant.DEFAULT_STRIKE = {
 };
 
 constant.DEFAULT_MATRIX = ["", "", "", "", "", "", "", "", ""];
+constant.CONNECTION_HANDLER_METHOD ="socketConnect";
+constant.DISCONNECTION_HANDLER_METHOD = "socketDisconnect"
 
 module.exports = constant;

@@ -31,7 +31,7 @@ class JoinGameAction extends baseAction {
         }
         const matrix = JSON.parse(room.matrix);
         this.setResponse("SUCCESS");
-        return { matrix: matrix };
+        return { room_id:room.room_id,matrix: matrix };
       } else if (game_mode === GLB.GAME_MODE.NEW_GAME) {
         await roomSqlLib.updateActiveRoomStatus(userObj.user_id);
         const roomId = await roomHelperLib.joinRoom(
