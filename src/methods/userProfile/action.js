@@ -5,6 +5,7 @@ class UserProfileAction extends baseAction {
       delete userObj.password;
       delete userObj.access_token;
       delete userObj.createdAt;
+      delete userObj.updatedAt;
       this.setResponse("SUCCESS");
       return { userDetails: userObj };
     } catch (e) {

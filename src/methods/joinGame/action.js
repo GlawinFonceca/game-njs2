@@ -3,7 +3,7 @@ class JoinGameAction extends baseAction {
     try {
       let [roomHelperLib] = AutoLoad.loadLibray("helperLib", ["room"]);
       let [roomSqlLib] = AutoLoad.loadLibray("sqlLib", ["room"]);
-      let { userObj, game_mode,roomId  } = this;
+      let { userObj, game_mode, roomId } = this;
 
       if (game_mode === GLB.GAME_MODE.NORMAL_CHECK) {
         let room = await roomSqlLib.findRoom({
@@ -15,13 +15,13 @@ class JoinGameAction extends baseAction {
           return {};
         }
         this.setResponse("SUCCESS");
-        return {room_id:room.room_id};
+        return { room_id: room.room_id };
       } else if (game_mode === GLB.GAME_MODE.RESUME_GAME) {
-        if(!roomId){
+        if (!roomId) {
           this.setResponse("INVALID_ROOM_ID");
           return {};
         }
-        const room= await roomSqlLib.findRoom({
+        const room = await roomSqlLib.findRoom({
           room_id: roomId,
           user_id: userObj.user_id,
         });
@@ -34,7 +34,10 @@ class JoinGameAction extends baseAction {
         return { matrix: matrix };
       } else if (game_mode === GLB.GAME_MODE.NEW_GAME) {
         await roomSqlLib.updateActiveRoomStatus(userObj.user_id);
-        const roomId = await roomHelperLib.joinRoom(userObj.user_id,userObj.points);
+        const roomId = await roomHelperLib.joinRoom(
+          userObj.user_id,
+          userObj.points
+        );
         if (!roomId) {
           this.setResponse("INSUFFICIENT_POINTS");
           return {};

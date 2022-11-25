@@ -5,7 +5,12 @@ class game {
       const strikes = JSON.stringify(strike);
       if (strike.strike1 !== 1) {
         if (matrix[0] === "x" && matrix[1] === "o" && matrix[2] === "x") {
-          await roomSqlLib.updateStrikes(userId, roomId, strikes, "$.strike1");
+          await roomSqlLib.updateDefaultStrikes(
+            userId,
+            roomId,
+            strikes,
+            "$.strike1"
+          );
           if (turn % 2 == 0) {
             await roomSqlLib.updateStrike(
               { user_id: userId, room_id: roomId },
@@ -21,7 +26,12 @@ class game {
       }
       if (strike.strike2 !== 1) {
         if (matrix[3] === "x" && matrix[4] === "o" && matrix[5] === "x") {
-          await roomSqlLib.updateStrikes(userId, roomId, strikes, "$.strike2");
+          await roomSqlLib.updateDefaultStrikes(
+            userId,
+            roomId,
+            strikes,
+            "$.strike2"
+          );
           if (turn % 2 == 0) {
             await roomSqlLib.updateStrike(
               { user_id: userId, room_id: roomId },
@@ -37,7 +47,12 @@ class game {
       }
       if (strike.strike3 !== 1) {
         if (matrix[6] === "x" && matrix[7] === "o" && matrix[8] === "x") {
-          await roomSqlLib.updateStrikes(userId, roomId, strikes, "$.strike3");
+          await roomSqlLib.updateDefaultStrikes(
+            userId,
+            roomId,
+            strikes,
+            "$.strike3"
+          );
           if (turn % 2 == 0) {
             await roomSqlLib.updateStrike(
               { user_id: userId, room_id: roomId },
@@ -53,7 +68,12 @@ class game {
       }
       if (strike.strike4 !== 1) {
         if (matrix[0] === "x" && matrix[3] === "o" && matrix[6] === "x") {
-          await roomSqlLib.updateStrikes(userId, roomId, strikes, "$.strike4");
+          await roomSqlLib.updateDefaultStrikes(
+            userId,
+            roomId,
+            strikes,
+            "$.strike4"
+          );
           if (turn % 2 == 0) {
             await roomSqlLib.updateStrike(
               { user_id: userId, room_id: roomId },
@@ -69,7 +89,12 @@ class game {
       }
       if (strike.strike5 !== 1) {
         if (matrix[1] === "x" && matrix[4] === "o" && matrix[7] === "x") {
-          await roomSqlLib.updateStrikes(userId, roomId, strikes, "$.strike5");
+          await roomSqlLib.updateDefaultStrikes(
+            userId,
+            roomId,
+            strikes,
+            "$.strike5"
+          );
           if (turn % 2 == 0) {
             await roomSqlLib.updateStrike(
               { user_id: userId, room_id: roomId },
@@ -85,7 +110,12 @@ class game {
       }
       if (strike.strike6 !== 1) {
         if (matrix[2] === "x" && matrix[5] === "o" && matrix[8] === "x") {
-          await roomSqlLib.updateStrikes(userId, roomId, strikes, "$.strike6");
+          await roomSqlLib.updateDefaultStrikes(
+            userId,
+            roomId,
+            strikes,
+            "$.strike6"
+          );
           if (turn % 2 == 0) {
             await roomSqlLib.updateStrike(
               { user_id: userId, room_id: roomId },
@@ -101,7 +131,12 @@ class game {
       }
       if (strike.strike7 !== 1) {
         if (matrix[0] === "x" && matrix[4] === "o" && matrix[8] === "x") {
-          await roomSqlLib.updateStrikes(userId, roomId, strikes, "$.strike7");
+          await roomSqlLib.updateDefaultStrikes(
+            userId,
+            roomId,
+            strikes,
+            "$.strike7"
+          );
           if (turn % 2 == 0) {
             await roomSqlLib.updateStrike(
               { user_id: userId, room_id: roomId },
@@ -117,7 +152,12 @@ class game {
       }
       if (strike.strike8 !== 1) {
         if (matrix[2] === "x" && matrix[4] === "o" && matrix[6] === "x") {
-          await roomSqlLib.updateStrikes(userId, roomId, strikes, "$.strike8");
+          await roomSqlLib.updateDefaultStrikes(
+            userId,
+            roomId,
+            strikes,
+            "$.strike8"
+          );
           if (turn % 2 == 0) {
             await roomSqlLib.updateStrike(
               { user_id: userId, room_id: roomId },

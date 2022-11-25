@@ -29,7 +29,7 @@ class room {
     }
   }
 
-  async updateStrikes(userId, roomId, strikes, strike) {
+  async updateDefaultStrikes(userId, roomId, strikes, strike) {
     try {
       return await SQLManager.doExecuteRawQuery(
         `UPDATE room SET strikes=JSON_SET('${strikes}','${strike}',1) WHERE user_id=${userId} AND room_id=${roomId}`

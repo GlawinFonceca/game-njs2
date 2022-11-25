@@ -23,6 +23,7 @@ class GameAction extends baseAction {
         this.setResponse("INVALID_VALUE");
         return {};
       }
+
       let room = await roomSqlLib.findRoom({
         user_id: userObj.user_id,
         room_id: roomId,
@@ -34,7 +35,7 @@ class GameAction extends baseAction {
 
       if (matrix[index] !== "") {
         this.setResponse("INVALID_INDEX");
-        return {};
+        return { matrix };
       }
       matrix.splice(index, 1, value);
       await roomSqlLib.updateMatrix(userObj.user_id, roomId, matrix);
@@ -46,37 +47,9 @@ class GameAction extends baseAction {
         userObj.user_id,
         roomId
       );
-      let botTurn = await gameHelperLib.chooseTurn(matrix);
-      if (botTurn % 2 == 0) {
-        //taking index of empty elements in matrix array
-        const indexOfMatrixElements = matrix
-          .map((item, i) => (item == "" ? i : 9))
-          .filter((x) => x != 9);
-        //return index indexOf Matrix's EmptyElements
-        const indexForBotSelection = await gameHelperLib.generateRandomIndex(
-          indexOfMatrixElements.length
-        );
-        const botSelectedData = await gameHelperLib.getRandomBotDecision();
-        const botSelectedIndex = indexOfMatrixElements[indexForBotSelection];
-        matrix.splice(botSelectedIndex, 1, botSelectedData);
-        await roomSqlLib.updateMatrix(userObj.user_id, roomId, matrix);
-        room = await roomSqlLib.findRoom({
-          user_id: userObj.user_id,
-          room_id: roomId,
-        });
-        botTurn = await gameHelperLib.chooseTurn(matrix);
-        await gameHelperLib.winnerSelection(
-          matrix,
-          room.strikes,
-          botTurn,
-          userObj.user_id,
-          roomId
-        );
-      } else {
-        return { matrix, message: "user's Turn" };
-      }
-      let draw = matrix.every((e) => e !== "");
-      if (draw) {
+
+      let completeMatrix = matrix.every((e) => e !== "");
+      if (completeMatrix) {
         room = await roomSqlLib.findRoom({
           user_id: userObj.user_id,
           room_id: roomId,
@@ -125,7 +98,38 @@ class GameAction extends baseAction {
           return { message: "match draw" };
         }
       }
-      return matrix;
+
+      let botTurn = await gameHelperLib.chooseTurn(matrix);
+      if (botTurn % 2 == 0) {
+        //taking index of empty elements in matrix array
+        const indexOfMatrixElements = matrix
+          .map((item, i) => (item == "" ? i : 9))
+          .filter((x) => x != 9);
+        //return index indexOf Matrix's EmptyElements
+        const indexForBotSelection = await gameHelperLib.generateRandomIndex(
+          indexOfMatrixElements.length
+        );
+        const botSelectedData = await gameHelperLib.getRandomBotDecision();
+        const botSelectedIndex = indexOfMatrixElements[indexForBotSelection];
+        matrix.splice(botSelectedIndex, 1, botSelectedData);
+        await roomSqlLib.updateMatrix(userObj.user_id, roomId, matrix);
+        room = await roomSqlLib.findRoom({
+          user_id: userObj.user_id,
+          room_id: roomId,
+        });
+        botTurn = await gameHelperLib.chooseTurn(matrix);
+        await gameHelperLib.winnerSelection(
+          matrix,
+          room.strikes,
+          botTurn,
+          userObj.user_id,
+          roomId
+        );
+      } else {
+        return { matrix };
+      }
+      this.setResponse("SUCCESS");
+      return { matrix, message: "User's Turn" };
     } catch (e) {
       console.log("Error game =>", e);
     }
