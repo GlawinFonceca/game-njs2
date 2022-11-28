@@ -1,22 +1,37 @@
-const { AutoLoad } = require("@njs2/base");
+const SQLManager = require("@njs2/sql");
 
 class SendMessageAction extends baseAction {
-
   async executeMethod() {
-    let { userId,message } = this;
+    let { userId, message } = this;
 
-    let [userSqlLib] = AutoLoad.loadLibray("sqlLib",["user"]);
-    const user = await userSqlLib.getUsers(userId);
-    if(!user.socket_id){
-      this.setResponse("SOCKETID_NOT_FOUND");
-      return{}
+    let [userSqlLib] = AutoLoad.loadLibray("sqlLib", ["user"]);
+
+    if (userId) {
+      const user = await userSqlLib.getUsers(userId);
+      if (!user.socket_id) {
+        this.setResponse("SOCKETID_NOT_FOUND");
+        return {};
+      }
+      SOCKETManager.emit(user.socket_id, message);
+      this.setResponse("SUCCESS");
+      return {};
     }
-    SOCKETManager.emit(user.socket_id,message);
+    const connectedUsers = await userSqlLib.findUsers(userId);
+    const socketId = connectedUsers.map((s_id) => {
+      return s_id.socket_id;
+    });
 
-    
-    this.setResponse('SUCCESS');
+    //exclude user
+    // const socketId = connectedUsers.map((s_id) =>{
+    //   if(s_id.user_id !== userId)
+    //   return s_id.socket_id;
+    // });
+
+    socketId.map((s_id) => {
+      SOCKETManager.emit(s_id, message);
+    });
+    this.setResponse("SUCCESS");
     return {};
-  };
-
+  }
 }
 module.exports = SendMessageAction;

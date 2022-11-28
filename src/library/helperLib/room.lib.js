@@ -19,7 +19,7 @@ class room {
         return false;
       }
     } catch (e) {
-      console.log("Error join =>", e);
+      console.log("Error joinRoom =>", e);
     }
   }
 }

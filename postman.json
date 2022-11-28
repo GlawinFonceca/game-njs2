@@ -178,7 +178,7 @@
               "type": "text"
             },
             {
-              "key": "message",
+              "key": "user_message",
               "value": "",
               "disabled": true,
               "description": "user message",

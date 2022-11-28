@@ -1,5 +1,3 @@
-const SQLManager = require("@njs2/sql");
-
 class room {
   async findRoom(query) {
     try {
@@ -35,7 +33,7 @@ class room {
         `UPDATE room SET strikes=JSON_SET('${strikes}','${strike}',1) WHERE user_id=${userId} AND room_id=${roomId}`
       );
     } catch (e) {
-      console.log("Error updateStrike =>", e);
+      console.log("Error updateDefaultStrikes =>", e);
     }
   }
 
@@ -47,7 +45,7 @@ class room {
         { matrix: matrix }
       );
     } catch (e) {
-      console.log("Error strikeUpdate =>", e);
+      console.log("Error updateMatrix =>", e);
     }
   }
 
@@ -55,7 +53,7 @@ class room {
     try {
       return await SQLManager.update("room", query, updates);
     } catch (e) {
-      console.log("Error strikeUpdate =>", e);
+      console.log("Error updateRoom =>", e);
     }
   }
 

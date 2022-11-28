@@ -31,12 +31,14 @@ class UserSignupAction extends baseAction {
       }
       password = await bcrypt.hash(password, GLB.SALTROUNDS);
       const points = GLB.USER_GAME.ENTRY_POINTS;
+      const status = GLB.USER_STATUS;
       let userObj = {
         name,
         email,
         password,
         phone,
         points,
+        status,
       };
       let userId = await userSqlLib.createUser(userObj);
       let accessToken = await jwtHelperLib.jwtEncryption(userId);

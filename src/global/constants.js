@@ -23,6 +23,7 @@ constant.DISCONNECTION_HANDLER_METHOD = null;
 
 constant.SALTROUNDS = 8;
 constant.JWT_EXPIRE_TIME = 3600000;
+constant.USER_STATUS=1;
 
 constant.USER_GAME = {
   WINNING_POINTS: 100,

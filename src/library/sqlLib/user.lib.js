@@ -20,7 +20,7 @@ class user {
     try {
       return await SQLManager.insert("user", user);
     } catch (e) {
-      console.log("Error create =>", e);
+      console.log("Error createUser =>", e);
     }
   }
 
@@ -29,6 +29,16 @@ class user {
       return await SQLManager.update("user", query, updates);
     } catch (e) {
       console.log("Error updateUsers =>", e);
+    }
+  }
+
+  async findUsers(userId){
+    try{
+      return await SQLManager.find('user',userId);
+
+    }
+    catch(e) {
+      console.log("Error findUsers =>",e);
     }
   }
 }
