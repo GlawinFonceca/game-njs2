@@ -1,5 +1,3 @@
-const SQLManager = require("@njs2/sql");
-
 class SendMessageAction extends baseAction {
   async executeMethod() {
     let { userId, message } = this;
@@ -16,7 +14,7 @@ class SendMessageAction extends baseAction {
       this.setResponse("SUCCESS");
       return {};
     }
-    const connectedUsers = await userSqlLib.findUsers(userId);
+    const connectedUsers = await userSqlLib.findUsers();
     const socketId = connectedUsers.map((s_id) => {
       return s_id.socket_id;
     });

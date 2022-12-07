@@ -32,9 +32,9 @@ class user {
     }
   }
 
-  async findUsers(userId){
+  async findUsers(){
     try{
-      return await SQLManager.find('user',userId);
+      return await SQLManager.find('user',{});
 
     }
     catch(e) {
